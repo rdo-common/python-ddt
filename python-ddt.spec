@@ -13,26 +13,18 @@
 
 Name: python-%{srcname}
 Version: 1.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A Python library to multiply test cases
 Group: Development/Libraries
 License: MIT
 URL: https://github.com/txels/%{srcname}
 Source0: https://github.com/txels/%{srcname}/archive/%{version}.tar.gz
+
 BuildArch: noarch
 BuildRequires: python2-devel
-BuildRequires: python-setuptools
-BuildRequires: python-coverage
-BuildRequires: python-nose
-BuildRequires: python-six >= 1.4.0
-%if 0%{?with_python3}
+BuildRequires: python2-setuptools
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
-BuildRequires: python3-coverage
-BuildRequires: python3-nose
-BuildRequires: python3-six >= 1.4.0
-%endif # if with_python3
-Provides: python2-%{srcname} = %{version}-%{release}
 
 
 %description
@@ -41,9 +33,27 @@ different test data, and make it appear as multiple test cases.  It is used in
 combination with other testing frameworks like unittest and nose.
 
 
+%package -n python2-%{srcname}
+Summary: Data-Driven/Decorated Tests
+BuildRequires: python2-coverage
+BuildRequires: python2-nose
+BuildRequires: python2-six >= 1.4.0
+%{?python_provide:%python_provide python2-%{srcname}}
+
+
+%description -n python2-%{srcname}
+DDT (Data-Driven Tests) allows you to multiply one test case by running it with
+different test data, and make it appear as multiple test cases.  It is used in
+combination with other testing frameworks like unittest and nose.
+
+
 %if 0%{?with_python3}
 %package -n python3-%{srcname}
 Summary: Data-Driven/Decorated Tests
+BuildRequires: python3-coverage
+BuildRequires: python3-nose
+BuildRequires: python3-six >= 1.4.0
+%{?python_provide:%python_provide python3-%{srcname}}
 
 
 %description -n python3-%{srcname}
@@ -58,16 +68,16 @@ combination with other testing frameworks like unittest and nose.
 
 
 %build
-%{__python2} setup.py build
+%py2_build
 %if 0%{?with_python3}
-%{__python3} setup.py build
+%py3_build
 %endif # with_python3
 
 
 %install
-%{__python2} setup.py install --optimize 1 --skip-build --root %{buildroot}
+%py2_install
 %if 0%{?with_python3}
-%{__python3} setup.py install --optimize 1 --skip-build --root %{buildroot}
+%py3_install
 %endif # with_python3
 
 
@@ -78,7 +88,7 @@ nosetests-%{python3_version} --nocapture --with-coverage --cover-package=ddt --c
 %endif # with_python3
 
 
-%files
+%files -n python2-%{srcname}
 %{!?_licensedir:%global license %%doc}
 %license LICENSE.md
 %doc README.md
@@ -96,6 +106,9 @@ nosetests-%{python3_version} --nocapture --with-coverage --cover-package=ddt --c
 
 
 %changelog
+* Tue Sep 01 2015 Carl George <carl.george@rackspace.com> - 1.0.0-3
+- Update to new packaging guidelines
+
 * Mon Jul 20 2015 Carl George <carl.george@rackspace.com> - 1.0.0-2
 - Remove separate py3 build directory
 - Update summary and description
