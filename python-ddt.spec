@@ -13,7 +13,7 @@
 
 Name: python-%{srcname}
 Version: 1.0.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A Python library to multiply test cases
 Group: Development/Libraries
 License: MIT
@@ -106,6 +106,9 @@ nosetests-%{python3_version} --nocapture --with-coverage --cover-package=ddt --c
 
 
 %changelog
+* Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
+
 * Tue Sep 01 2015 Carl George <carl.george@rackspace.com> - 1.0.0-3
 - Update to new packaging guidelines
 
