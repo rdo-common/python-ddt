@@ -5,26 +5,38 @@
 %endif
 
 %if 0%{?fedora}
-%global with_python3 1
+%bcond_without python3
 %global _docdir_fmt %{name}
+%endif
+
+%if 0%{?fedora} >= 23
+%bcond_without python2_dependency_names
 %endif
 
 %global srcname ddt
 
 Name: python-%{srcname}
 Version: 1.0.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A Python library to multiply test cases
-Group: Development/Libraries
 License: MIT
 URL: https://github.com/txels/%{srcname}
 Source0: https://github.com/txels/%{srcname}/archive/%{version}.tar.gz
 
 BuildArch: noarch
+
+%if %{with python2_dependency_names}
 BuildRequires: python2-devel
 BuildRequires: python2-setuptools
+%else
+BuildRequires: python-devel
+BuildRequires: python-setuptools
+%endif
+
+%if %{with python3}
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
+%endif
 
 
 %description
@@ -35,9 +47,15 @@ combination with other testing frameworks like unittest and nose.
 
 %package -n python2-%{srcname}
 Summary: Data-Driven/Decorated Tests
-BuildRequires: python2-coverage
+
+%if %{with python2_dependency_names}
 BuildRequires: python2-nose
 BuildRequires: python2-six >= 1.4.0
+%else
+BuildRequires: python-nose
+BuildRequires: python-six >= 1.4.0
+%endif
+
 %{?python_provide:%python_provide python2-%{srcname}}
 
 
@@ -47,12 +65,13 @@ different test data, and make it appear as multiple test cases.  It is used in
 combination with other testing frameworks like unittest and nose.
 
 
-%if 0%{?with_python3}
+%if %{with python3}
 %package -n python3-%{srcname}
 Summary: Data-Driven/Decorated Tests
-BuildRequires: python3-coverage
+
 BuildRequires: python3-nose
 BuildRequires: python3-six >= 1.4.0
+
 %{?python_provide:%python_provide python3-%{srcname}}
 
 
@@ -60,7 +79,7 @@ BuildRequires: python3-six >= 1.4.0
 DDT (Data-Driven Tests) allows you to multiply one test case by running it with
 different test data, and make it appear as multiple test cases.  It is used in
 combination with other testing frameworks like unittest and nose.
-%endif # with_python3
+%endif
 
 
 %prep
@@ -69,23 +88,23 @@ combination with other testing frameworks like unittest and nose.
 
 %build
 %py2_build
-%if 0%{?with_python3}
+%if %{with python3}
 %py3_build
-%endif # with_python3
+%endif
 
 
 %install
 %py2_install
-%if 0%{?with_python3}
+%if %{with python3}
 %py3_install
-%endif # with_python3
+%endif
 
 
 %check
-nosetests-%{python2_version} --nocapture --with-coverage --cover-package=ddt --cover-html
-%if 0%{?with_python3}
-nosetests-%{python3_version} --nocapture --with-coverage --cover-package=ddt --cover-html
-%endif # with_python3
+nosetests-%{python2_version}
+%if %{with python3}
+nosetests-%{python3_version}
+%endif
 
 
 %files -n python2-%{srcname}
@@ -95,17 +114,22 @@ nosetests-%{python3_version} --nocapture --with-coverage --cover-package=ddt --c
 %{python2_sitelib}/%{srcname}*
 
 
-%if 0%{?with_python3}
+%if %{with python3}
 %files -n python3-%{srcname}
 %{!?_licensedir:%global license %%doc}
 %license LICENSE.md
 %doc README.md
 %{python3_sitelib}/%{srcname}*
 %{python3_sitelib}/__pycache__/%{srcname}*
-%endif # with_python3
+%endif
 
 
 %changelog
+* Sat Dec 05 2015 Carl George <carl.george@rackspace.com> - 1.0.1-2
+- Remove coverage build dependency
+- Change python3 control macros to a bcond macro
+- Add bcond macro to optionally require explicit python2 names
+
 * Thu Nov 19 2015 Carl George <carl.george@rackspace.com> - 1.0.1-1
 - Latest upstream
 
