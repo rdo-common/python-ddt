@@ -16,8 +16,8 @@
 %global srcname ddt
 
 Name: python-%{srcname}
-Version: 1.0.1
-Release: 3%{?dist}
+Version: 1.0.2
+Release: 1%{?dist}
 Summary: A Python library to multiply test cases
 License: MIT
 URL: https://github.com/txels/%{srcname}
@@ -125,6 +125,9 @@ nosetests-%{python3_version}
 
 
 %changelog
+* Fri May 20 2016 Carl George <carl.george@rackspace.com> - 1.0.2-1
+- Latest upstream
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
