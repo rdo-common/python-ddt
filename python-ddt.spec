@@ -17,7 +17,7 @@
 
 Name: python-%{srcname}
 Version: 1.0.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A Python library to multiply test cases
 License: MIT
 URL: https://github.com/txels/%{srcname}
@@ -125,6 +125,9 @@ nosetests-%{python3_version}
 
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.0.2-3
+- Rebuild for Python 3.6
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-2
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
