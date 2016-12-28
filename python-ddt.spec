@@ -1,130 +1,87 @@
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%global __python2 %{_bindir}/python2
-%global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-%global python2_version %(%{__python2} -c "import sys; sys.stdout.write(sys.version[:3])")
-%endif
-
-%if 0%{?fedora}
-%bcond_without python3
 %global _docdir_fmt %{name}
-%endif
-
-%if 0%{?fedora} >= 23
-%bcond_without python2_dependency_names
-%endif
-
 %global srcname ddt
 
-Name: python-%{srcname}
-Version: 1.0.2
-Release: 3%{?dist}
-Summary: A Python library to multiply test cases
-License: MIT
-URL: https://github.com/txels/%{srcname}
-Source0: https://github.com/txels/%{srcname}/archive/%{version}.tar.gz
+Name:           python-%{srcname}
+Version:        1.1.1
+Release:        1%{?dist}
+Summary:        Python library to multiply test cases
 
-BuildArch: noarch
+License:        MIT
+URL:            https://github.com/txels/ddt
+Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
 
-%if %{with python2_dependency_names}
-BuildRequires: python2-devel
-BuildRequires: python2-setuptools
-%else
-BuildRequires: python-devel
-BuildRequires: python-setuptools
-%endif
+BuildArch:      noarch
 
-%if %{with python3}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-%endif
-
-
-%description
-DDT (Data-Driven Tests) allows you to multiply one test case by running it with
-different test data, and make it appear as multiple test cases.  It is used in
+%global _description \
+DDT (Data-Driven Tests) allows you to multiply one test case by running it with\
+different test data, and make it appear as multiple test cases. It is used in\
 combination with other testing frameworks like unittest and nose.
 
+%description %{_description}
 
 %package -n python2-%{srcname}
-Summary: Data-Driven/Decorated Tests
-
-%if %{with python2_dependency_names}
-BuildRequires: python2-nose
-BuildRequires: python2-six >= 1.4.0
-%else
-BuildRequires: python-nose
-BuildRequires: python-six >= 1.4.0
-%endif
-
+Summary:        %{summary}
 %{?python_provide:%python_provide python2-%{srcname}}
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-nose
+BuildRequires:  python2-mock
+BuildRequires:  python2-six >= 1.4.0
+BuildRequires:  python2-yaml
+Recommends:     python2-yaml
 
+%description -n python2-%{srcname} %{_description}
 
-%description -n python2-%{srcname}
-DDT (Data-Driven Tests) allows you to multiply one test case by running it with
-different test data, and make it appear as multiple test cases.  It is used in
-combination with other testing frameworks like unittest and nose.
+Python 2 version.
 
-
-%if %{with python3}
 %package -n python3-%{srcname}
-Summary: Data-Driven/Decorated Tests
-
-BuildRequires: python3-nose
-BuildRequires: python3-six >= 1.4.0
-
+Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-nose
+BuildRequires:  python3-mock
+BuildRequires:  python3-six >= 1.4.0
+BuildRequires:  python3-yaml
+Recommends:     python3-yaml
 
+%description -n python3-%{srcname} %{_description}
 
-%description -n python3-%{srcname}
-DDT (Data-Driven Tests) allows you to multiply one test case by running it with
-different test data, and make it appear as multiple test cases.  It is used in
-combination with other testing frameworks like unittest and nose.
-%endif
-
+Python 3 version.
 
 %prep
-%setup -q -n %{srcname}-%{version}
-
+%autosetup -n %{srcname}-%{version}
 
 %build
 %py2_build
-%if %{with python3}
 %py3_build
-%endif
-
 
 %install
 %py2_install
-%if %{with python3}
 %py3_install
-%endif
-
 
 %check
-nosetests-%{python2_version}
-%if %{with python3}
-nosetests-%{python3_version}
-%endif
-
+nosetests-%{python2_version} -v
+nosetests-%{python3_version} -v
 
 %files -n python2-%{srcname}
-%{!?_licensedir:%global license %%doc}
 %license LICENSE.md
 %doc README.md
-%{python2_sitelib}/%{srcname}*
+%{python2_sitelib}/%{srcname}-*.egg-info
+%{python2_sitelib}/%{srcname}.py*
 
-
-%if %{with python3}
 %files -n python3-%{srcname}
-%{!?_licensedir:%global license %%doc}
 %license LICENSE.md
 %doc README.md
-%{python3_sitelib}/%{srcname}*
-%{python3_sitelib}/__pycache__/%{srcname}*
-%endif
-
+%{python3_sitelib}/%{srcname}-*.egg-info/
+%{python3_sitelib}/%{srcname}.py
+%{python3_sitelib}/__pycache__/%{srcname}.*
 
 %changelog
+* Wed Dec 28 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.1.1-1
+- Update to 1.1.1
+- Modernize spec
+
 * Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.0.2-3
 - Rebuild for Python 3.6
 
