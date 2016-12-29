@@ -1,9 +1,15 @@
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%bcond_with python3
+%else
+%bcond_without python3
+%endif
+
 %global _docdir_fmt %{name}
 %global srcname ddt
 
 Name:           python-%{srcname}
 Version:        1.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python library to multiply test cases
 
 License:        MIT
@@ -23,17 +29,28 @@ combination with other testing frameworks like unittest and nose.
 Summary:        %{summary}
 %{?python_provide:%python_provide python2-%{srcname}}
 BuildRequires:  python2-devel
+%if 0%{?rhel} && 0%{?rhel} <= 7
+BuildRequires:  python-setuptools
+BuildRequires:  python-nose
+BuildRequires:  python-mock
+BuildRequires:  python-six >= 1.4.0
+BuildRequires:  PyYAML
+%else
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-nose
 BuildRequires:  python2-mock
 BuildRequires:  python2-six >= 1.4.0
 BuildRequires:  python2-yaml
+%endif
+%if ! 0%{?rhel} || 0%{?rhel} > 7
 Recommends:     python2-yaml
+%endif
 
 %description -n python2-%{srcname} %{_description}
 
 Python 2 version.
 
+%if %{with python3}
 %package -n python3-%{srcname}
 Summary:        %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
@@ -43,26 +60,35 @@ BuildRequires:  python3-nose
 BuildRequires:  python3-mock
 BuildRequires:  python3-six >= 1.4.0
 BuildRequires:  python3-yaml
+%if ! 0%{?rhel} || 0%{?rhel} > 7
 Recommends:     python3-yaml
+%endif
 
 %description -n python3-%{srcname} %{_description}
 
 Python 3 version.
+%endif
 
 %prep
 %autosetup -n %{srcname}-%{version}
 
 %build
 %py2_build
+%if %{with python3}
 %py3_build
+%endif
 
 %install
 %py2_install
+%if %{with python3}
 %py3_install
+%endif
 
 %check
 nosetests-%{python2_version} -v
+%if %{with python3}
 nosetests-%{python3_version} -v
+%endif
 
 %files -n python2-%{srcname}
 %license LICENSE.md
@@ -70,14 +96,19 @@ nosetests-%{python3_version} -v
 %{python2_sitelib}/%{srcname}-*.egg-info
 %{python2_sitelib}/%{srcname}.py*
 
+%if %{with python3}
 %files -n python3-%{srcname}
 %license LICENSE.md
 %doc README.md
 %{python3_sitelib}/%{srcname}-*.egg-info/
 %{python3_sitelib}/%{srcname}.py
 %{python3_sitelib}/__pycache__/%{srcname}.*
+%endif
 
 %changelog
+* Thu Dec 29 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.1.1-2
+- Add EPEL7 conditionals
+
 * Wed Dec 28 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.1.1-1
 - Update to 1.1.1
 - Modernize spec
