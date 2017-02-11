@@ -9,7 +9,7 @@
 
 Name:           python-%{srcname}
 Version:        1.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python library to multiply test cases
 
 License:        MIT
@@ -106,6 +106,9 @@ nosetests-%{python3_version} -v
 %endif
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Dec 29 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.1.1-2
 - Add EPEL7 conditionals
 
