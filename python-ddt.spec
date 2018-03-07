@@ -1,15 +1,9 @@
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%bcond_with python3
-%else
-%bcond_without python3
-%endif
-
 %global _docdir_fmt %{name}
 %global srcname ddt
 
 Name:           python-%{srcname}
-Version:        1.1.1
-Release:        5%{?dist}
+Version:        1.1.2
+Release:        1%{?dist}
 Summary:        Python library to multiply test cases
 
 License:        MIT
@@ -50,62 +44,56 @@ Recommends:     python2-yaml
 
 Python 2 version.
 
-%if %{with python3}
-%package -n python3-%{srcname}
+%package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-nose
-BuildRequires:  python3-mock
-BuildRequires:  python3-six >= 1.4.0
-BuildRequires:  python3-yaml
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-nose
+BuildRequires:  python%{python3_pkgversion}-mock
+BuildRequires:  python%{python3_pkgversion}-six >= 1.4.0
+BuildRequires:  python%{python3_pkgversion}-yaml
 %if ! 0%{?rhel} || 0%{?rhel} > 7
-Recommends:     python3-yaml
+Recommends:     python%{python3_pkgversion}-yaml
 %endif
 
-%description -n python3-%{srcname} %{_description}
+%description -n python%{python3_pkgversion}-%{srcname} %{_description}
 
 Python 3 version.
-%endif
 
 %prep
 %autosetup -n %{srcname}-%{version}
 
 %build
 %py2_build
-%if %{with python3}
 %py3_build
-%endif
 
 %install
 %py2_install
-%if %{with python3}
 %py3_install
-%endif
 
 %check
 nosetests-%{python2_version} -v
-%if %{with python3}
 nosetests-%{python3_version} -v
-%endif
 
 %files -n python2-%{srcname}
 %license LICENSE.md
 %doc README.md
-%{python2_sitelib}/%{srcname}-*.egg-info
+%{python2_sitelib}/%{srcname}-%{version}-py%{python2_version}.egg-info
 %{python2_sitelib}/%{srcname}.py*
 
-%if %{with python3}
-%files -n python3-%{srcname}
+%files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE.md
 %doc README.md
-%{python3_sitelib}/%{srcname}-*.egg-info/
+%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/%{srcname}.py
 %{python3_sitelib}/__pycache__/%{srcname}.*
-%endif
 
 %changelog
+* Wed Mar 07 2018 Carl George <carl@george.computer> - 1.1.2-1
+- Latest upstream
+- Enable EPEL python3 subpackage
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
