@@ -1,21 +1,18 @@
 %global _docdir_fmt %{name}
 %global srcname ddt
-
-Name:           python-%{srcname}
-Version:        1.1.2
-Release:        1%{?dist}
-Summary:        Python library to multiply test cases
-
-License:        MIT
-URL:            https://github.com/txels/ddt
-Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-BuildArch:      noarch
-
 %global _description \
 DDT (Data-Driven Tests) allows you to multiply one test case by running it with\
 different test data, and make it appear as multiple test cases. It is used in\
 combination with other testing frameworks like unittest and nose.
+
+Name:           python-%{srcname}
+Version:        1.1.3
+Release:        1%{?dist}
+Summary:        Python library to multiply test cases
+License:        MIT
+URL:            https://github.com/txels/ddt
+Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+BuildArch:      noarch
 
 %description %{_description}
 
@@ -87,9 +84,12 @@ nosetests-%{python3_version} -v
 %doc README.md
 %{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/%{srcname}.py
-%{python3_sitelib}/__pycache__/%{srcname}.*
+%{python3_sitelib}/__pycache__/%{srcname}.cpython-%{python3_version_nodots}*.py*
 
 %changelog
+* Mon May 14 2018 Carl George <carl@george.computer> - 1.1.3-1
+- Latest upstream
+
 * Wed Mar 07 2018 Carl George <carl@george.computer> - 1.1.2-1
 - Latest upstream
 - Enable EPEL python3 subpackage
