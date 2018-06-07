@@ -5,6 +5,10 @@ DDT (Data-Driven Tests) allows you to multiply one test case by running it with\
 different test data, and make it appear as multiple test cases. It is used in\
 combination with other testing frameworks like unittest and nose.
 
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_python3 1
+%endif
+
 Name:           python-%{srcname}
 Version:        1.1.3
 Release:        1%{?dist}
@@ -41,6 +45,7 @@ Recommends:     python2-yaml
 
 Python 2 version.
 
+%if 0%{?with_python3}
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{summary}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
@@ -57,21 +62,28 @@ Recommends:     python%{python3_pkgversion}-yaml
 %description -n python%{python3_pkgversion}-%{srcname} %{_description}
 
 Python 3 version.
+%endif
 
 %prep
 %autosetup -n %{srcname}-%{version}
 
 %build
 %py2_build
+%if 0%{?with_python3}
 %py3_build
+%endif
 
 %install
 %py2_install
+%if 0%{?with_python3}
 %py3_install
+%endif
 
 %check
 nosetests-%{python2_version} -v
+%if 0%{?with_python3}
 nosetests-%{python3_version} -v
+%endif
 
 %files -n python2-%{srcname}
 %license LICENSE.md
@@ -79,12 +91,14 @@ nosetests-%{python3_version} -v
 %{python2_sitelib}/%{srcname}-%{version}-py%{python2_version}.egg-info
 %{python2_sitelib}/%{srcname}.py*
 
+%if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE.md
 %doc README.md
 %{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/%{srcname}.py
 %{python3_sitelib}/__pycache__/%{srcname}.cpython-%{python3_version_nodots}*.py*
+%endif
 
 %changelog
 * Mon May 14 2018 Carl George <carl@george.computer> - 1.1.3-1
