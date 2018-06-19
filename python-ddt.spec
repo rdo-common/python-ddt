@@ -11,7 +11,7 @@ combination with other testing frameworks like unittest and nose.
 
 Name:           python-%{srcname}
 Version:        1.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python library to multiply test cases
 License:        MIT
 URL:            https://github.com/txels/ddt
@@ -101,6 +101,9 @@ nosetests-%{python3_version} -v
 %endif
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.1.3-2
+- Rebuilt for Python 3.7
+
 * Mon May 14 2018 Carl George <carl@george.computer> - 1.1.3-1
 - Latest upstream
 
