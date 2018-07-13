@@ -11,7 +11,7 @@ combination with other testing frameworks like unittest and nose.
 
 Name:           python-%{srcname}
 Version:        1.1.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python library to multiply test cases
 License:        MIT
 URL:            https://github.com/txels/ddt
@@ -101,6 +101,9 @@ nosetests-%{python3_version} -v
 %endif
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.1.3-2
 - Rebuilt for Python 3.7
 
