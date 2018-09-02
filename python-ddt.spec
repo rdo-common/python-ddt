@@ -1,4 +1,3 @@
-%global _docdir_fmt %{name}
 %global srcname ddt
 %global _description \
 DDT (Data-Driven Tests) allows you to multiply one test case by running it with\
@@ -10,8 +9,8 @@ combination with other testing frameworks like unittest and nose.
 %endif
 
 Name:           python-%{srcname}
-Version:        1.1.3
-Release:        3%{?dist}
+Version:        1.2.0
+Release:        1%{?dist}
 Summary:        Python library to multiply test cases
 License:        MIT
 URL:            https://github.com/txels/ddt
@@ -88,19 +87,22 @@ nosetests-%{python3_version} -v
 %files -n python2-%{srcname}
 %license LICENSE.md
 %doc README.md
-%{python2_sitelib}/%{srcname}-%{version}-py%{python2_version}.egg-info
+%{python2_sitelib}/%{srcname}-*.egg-info/
 %{python2_sitelib}/%{srcname}.py*
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE.md
 %doc README.md
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info
+%{python3_sitelib}/%{srcname}-*.egg-info/
 %{python3_sitelib}/%{srcname}.py
-%{python3_sitelib}/__pycache__/%{srcname}.cpython-%{python3_version_nodots}*.py*
+%{python3_sitelib}/__pycache__/%{srcname}.*
 %endif
 
 %changelog
+* Sun Sep 02 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.2.0-1
+- Update to 1.2.0
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
